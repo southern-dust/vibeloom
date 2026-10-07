@@ -8,6 +8,7 @@ Assistant slug in the `assistant` frontmatter field. One file per assistant.
 
 Generator guidance:
 - Include concrete container-specific pointers: container slug, resident BCs, component inventory, owned paths, local dependency edges, local constraints, test commands.
+- **Host note (DeepSeek Harness):** per-container configs are NOT auto-loaded (DSH loads only the project-root→cwd chain). The subagent owning this container must read this file explicitly; a file created by bash/Python does not trigger discovery.
 - Derived from approved contract entities at container scope and above (container spec + system + containers + defaults).
 - Do not duplicate contract content. Reference item IDs and artifacts.
 -->

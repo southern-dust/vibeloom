@@ -76,8 +76,8 @@ echo "  commit ts (UTC): $SOURCE_TS  (epoch=$SOURCE_TS_EPOCH)"
 echo "  build date (UTC): $BUILD_DATE"
 echo "  staging: $STAGING"
 
-# --- step 0: gate on source-vs-disk parity and link integrity ---
-# Both are decidable checks; a release should never be cuttable while either fails.
+# --- step 0: gate on source-vs-disk parity, link integrity, loader-visible frontmatter ---
+# All are decidable checks; a release should never be cuttable while any fails.
 if [ ! -f "$SURFACE/SKILL.md" ]; then
   echo "ERROR: SKILL.md not found at $SURFACE — run extract-templates.py first"
   exit 1
@@ -88,6 +88,9 @@ python3 "$V03/extract-templates.py" --check
 
 echo "  gate: check-links.py (repo layout link integrity)"
 python3 "$V03/check-links.py" --root "$SURFACE" --quiet
+
+echo "  gate: dsh/check-skill-frontmatter.py (loader-visible frontmatter)"
+python3 "$V03/dsh/check-skill-frontmatter.py" "$SURFACE/SKILL.md" --quiet
 
 # --- step 1: assemble bundle ---
 rm -rf "$STAGING"

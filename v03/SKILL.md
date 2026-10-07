@@ -1,6 +1,6 @@
 ---
 name: vibeloom
-description: Contract-driven agentic engineering for long-lived AI-coded projects. Use when the user wants to bootstrap, import, generate, eval, review, reconcile, or approve artifacts in a project governed by VibeLoom (modes: vibe, pm, dev, ux, expert).
+description: "Contract-driven agentic engineering for long-lived AI-coded projects. Use when the user wants to bootstrap, import, generate, eval, review, reconcile, or approve artifacts in a project governed by VibeLoom (modes: vibe, pm, dev, ux, expert)."
 argument-hint: "[init|import|generate|eval|review|reconcile|approve|status] [target]"
 ---
 
@@ -28,6 +28,7 @@ Always consult these before making decisions:
 - **[references/artifacts.md](references/artifacts.md)** — artifact layout, frontmatter shapes, ID schema, derivation rules, layer-aware constraints.
 - **[references/eval.md](references/eval.md)** — verification ladder (decidable / mechanical / heuristic), heuristic dimensions, finding schema, severity classification.
 - **[references/troubleshooting.md](references/troubleshooting.md)** — failure modes and recovery (cache corruption, lifecycle drift, breaking changes, partial wave failure, late-fetch overflow).
+- **[references/host-dsh.md](references/host-dsh.md)** — host adapter for DeepSeek Harness: invocation, approval gates, sandbox, and subagent/context differences. Load only when the host is DSH; Claude Code and Codex follow this file as written.
 
 ## Templates
 
@@ -59,24 +60,26 @@ Load the task template for the operation being invoked.
 
 ## Engine
 
-The engine is a deterministic Python package at the repo root (`engine/`). **Zero install, zero dependencies** beyond Python 3.10+. Invoke via `python -m`:
+The engine is a deterministic Python package at the repo root (`engine/`). **Zero install, zero dependencies** beyond Python 3.10+. Invoke via `python -m`, with the global `--repo` **before** the subcommand:
 
 ```bash
-PYTHONPATH=<skill-root>/engine python3 -m vibeloom_engine <command> --repo <target-repo>
+PYTHONPATH=<skill-root>/engine python3 -m vibeloom_engine --repo <target-repo> <command> [options]
 ```
 
 Available commands:
 
 | Engine command | Purpose |
 |---|---|
-| `parse --repo <path>` | Parse all artifacts; emit JSON inventory |
-| `graph --repo <path>` | Build + persist the full-mode `.vibeloom/cache/contract-graph.json` |
-| `eval --repo <path> [--target <tier>]` | Run structural checks; non-zero exit on blockers |
-| `affected --repo <path> --ids <IDs...>` | Compute affected set from changed item IDs |
-| `staleness --repo <path>` | Per-item hash diff vs approval traces; forward DAG walk |
-| `detect-edits --repo <path>` | mtime fast-filter + per-item hash confirmation |
-| `dispatch --repo <path> --affected <IDs>` | Build dispatch plan with wave assembly |
-| `status --repo <path>` | Emit status; full modes may persist cache, vibe emits a one-screen report |
+| `parse` | Parse all artifacts; emit JSON inventory |
+| `graph` | Build + persist the full-mode `.vibeloom/cache/contract-graph.json` |
+| `eval [--target <tier>]` | Run structural checks; non-zero exit on blockers |
+| `affected --ids <IDs...>` | Compute affected set from changed item IDs |
+| `staleness` | Per-item hash diff vs approval traces; forward DAG walk |
+| `detect-edits` | mtime fast-filter + per-item hash confirmation |
+| `dispatch [--ids <IDs...>] [--max-wave-size N]` | Build dispatch plan with wave assembly |
+| `status` | Emit status; full modes may persist cache, vibe emits a one-screen report |
+
+`--ids` takes one or more space-separated item IDs; `dispatch` without it uses the whole-repo affected set.
 
 All engine commands emit JSON on stdout. The engine makes NO semantic judgments — it parses, validates structure, computes the graph, plans dispatch, and reports. Semantic judgment and user interaction remain with the skill.
 

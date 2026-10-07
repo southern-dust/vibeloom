@@ -33,6 +33,8 @@ The header is binding. Everything below operates within these constraints.
 
 ## What you receive (the load set)
 
+**Fresh-context host note (DeepSeek Harness):** a subagent starts from an empty conversation and returns only its final text — nothing is inherited from the orchestrator. The load set below is delivered as explicit paths or inlined content in this prompt. If a needed slice is missing, use the single late-fetch request; do not assume the orchestrator's context is visible. On a host that seeds subagents from parent turns, treat this list as the authoritative scope regardless of what else is visible.
+
 You have been provided with the following load set:
 
 - **Baseline**: root config (`AGENTS.md` / `CLAUDE.md` at repo root) + repo-wide defaults (`defaults.md`, including the Tech Stack section per layer).
@@ -48,7 +50,7 @@ You do NOT have access to:
 
 ## Your job
 
-Follow the task template at `templates/tasks/{{template_id}}.md` for step-by-step instructions specific to your task type.
+Follow the task template at `tasks/{{template_id}}.md` for step-by-step instructions specific to your task type.
 
 Per the task template's Steps section:
 - Read your load set.

@@ -8,6 +8,7 @@ Assistant slug in the `assistant` frontmatter field (e.g., `claude`, `codex`). O
 
 Generator guidance:
 - Include concrete project-specific pointers: artifact IDs, interface names, owned paths, test commands, cross-scope dependency cues — so subagents can orient without loading the full Contract Graph.
+- **Host note (DeepSeek Harness):** DSH auto-loads root `AGENTS.md` / `CLAUDE.md`; a `CLAUDE.md` that duplicates `AGENTS.md` is de-duplicated, so emit one canonical file and make the other a one-line pointer. Never emit `context/AGENTS.md` — DSH does not load it.
 - Derived from approved contract entities owned at root scope and above (none above root, so just root: intent, defaults, prd, usm, dm, ux, system, containers in full modes; compact intent + defaults + system in vibe).
 - Do not duplicate contract content. Reference item IDs and artifacts.
 - Context artifacts never outrank contract. Config is operational guidance.

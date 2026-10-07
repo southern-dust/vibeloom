@@ -33,6 +33,8 @@ Generate or repair context artifacts from approved contract. Full modes generate
    - **root**: `AGENTS.md`, `CLAUDE.md` (one per assistant) at repo root. Includes governance summary, mode, contract inventory pointers, current run state.
    - **per-container**: `<container>/AGENTS.md`, `<container>/CLAUDE.md`. Includes container layer + deployment target + resident BCs (domain only) + component inventory + dependency edges.
    - **per-component**: `<container>/<component>/AGENTS.md`, `<container>/<component>/CLAUDE.md`. Includes component IFs / DEPs / BEHs / NOTEs + ownership boundary + load-set hints.
+
+   > **Host note (DeepSeek Harness):** DSH auto-loads `AGENTS.md` / `CLAUDE.md` only from the project root down to the session cwd. Generate the root `AGENTS.md`; a root `CLAUDE.md` whose content duplicates it is de-duplicated, so make it a one-line pointer rather than a copy. Per-container and per-component configs are **not** in that chain — the owning subagent must read its scope config explicitly, and a file created by bash/Python does not trigger discovery. Never emit `context/AGENTS.md`; DSH does not load it.
 3. For each component (full modes only — not vibe), generate per-behavior `<container>/<component>/context/bdd/BEH-####.md` Gherkin scenarios:
    - SCN-#### derives from ACC, INV, BEH, STORY.
    - Non-executable Gherkin (Given / When / Then) — runnable later via the contract-conformance or bdd validation runners.

@@ -8,6 +8,7 @@ Assistant slug in the `assistant` frontmatter field. One file per assistant.
 
 Generator guidance:
 - Include concrete component-specific pointers: component slug, owning container, bounded context, owned paths, owned interfaces, dependencies, test commands for this component.
+- **Host note (DeepSeek Harness):** per-component configs are NOT auto-loaded (DSH loads only the project-root→cwd chain). The subagent owning this component must read this file explicitly; a file created by bash/Python does not trigger discovery.
 - Derived from approved contract entities at component scope and above (component spec + container + system + containers + defaults).
 - Do not duplicate contract content. Reference item IDs.
 - Subagents loading this config also load the component spec itself; do not restate the spec.
